@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>THUMBA — Admin Dashboard</title>
+  <meta name="description" content="THUMBA Admin Dashboard — Manage your jewellery catalogue, prices, and inventory." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* =============================================
+       THUMBA DASHBOARD — Design System
+       ============================================= */
+    :root {
+      --bg: #fcfcfd;
+      --surface: #ffffff;
+      --surface-2: #f4f4f6;
+      --surface-3: #e9e9ed;
+      --border: rgba(0, 0, 0, 0.06);
+      --border-gold: rgba(154, 123, 62, 0.2);
+      --gold: #9A7B3E;
+      --gold-light: #BFA46F;
+      --gold-dark: #7A5E2B;
+      --gold-dim: rgba(154, 123, 62, 0.06);
+      --white: #ffffff;
+      --text-primary: #1c1c1e;
+      --text-secondary: #636366;
+      --text-muted: #8e8e93;
+      --green: #10b981;
+      --green-dim: rgba(16, 185, 129, 0.08);
+      --red: #ef4444;
+      --red-dim: rgba(239, 68, 68, 0.08);
+      --amber: #f59e0b;
+      --amber-dim: rgba(245, 158, 11, 0.08);
+      --blue: #007aff;
+      --blue-dim: rgba(0, 122, 255, 0.08);
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --transition: 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      --sidebar-w: 240px;
+      --glow: 0 12px 30px rgba(154, 123, 62, 0.05);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+    img { display: block; object-fit: cover; }
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+    button { cursor: pointer; border: none; font-family: inherit; }
+    input, select, textarea { font-family: inherit; }
+
+    /* =============================================
+       SIDEBAR
+       ============================================= */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      height: 100vh;
+      position: fixed;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      transition: transform var(--transition);
+    }
+
+    .sidebar-logo {
+      padding: 28px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .sidebar-logo-text {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+    }
+    .sidebar-logo-sub {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 20px 0;
+      overflow-y: auto;
+    }
+    .nav-section-label {
+      padding: 8px 24px 6px;
+      font-size: 0.58rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 24px;
+      font-size: 0.78rem;
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color var(--transition), background var(--transition);
+      border-left: 2px solid transparent;
+      position: relative;
+    }
+    .nav-item:hover { color: var(--text-primary); background: rgba(0,0,0,0.03); }
+    .nav-item.active {
+      color: var(--gold);
+      border-left-color: var(--gold);
+      background: var(--gold-dim);
+    }
+    .nav-item svg { flex-shrink: 0; opacity: 0.7; }
+    .nav-item.active svg { opacity: 1; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--gold-dim);
+      color: var(--gold);
+      font-size: 0.6rem;
+      padding: 2px 7px;
+      border-radius: 20px;
+      border: 1px solid var(--border-gold);
+    }
+
+    .sidebar-footer {
+      padding: 20px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .sidebar-store-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      color: var(--text-secondary);
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: color var(--transition), border-color var(--transition);
+    }
+    .sidebar-store-link:hover { color: var(--gold); border-color: var(--border-gold); }
+
+    /* =============================================
+       MAIN CONTENT
+       ============================================= */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 40px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 90;
+    }
+    .topbar-title {
+      font-family: var(--font-serif);
+      font-size: 1.3rem;
+      font-weight: 300;
+      color: var(--text-primary);
+      flex: 1;
+    }
+    .topbar-title span { color: var(--gold); }
+    .topbar-badge {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(74,222,128,0.2);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .topbar-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.8); }
+    }
+    .topbar-btn {
+      padding: 9px 20px;
+      background: var(--gold);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), transform 0.2s, box-shadow 0.3s;
+    }
+    .topbar-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 16px rgba(154, 123, 62, 0.2);
+    }
+
+    /* =============================================
+       PAGE CONTENT
+       ============================================= */
+    .page-content {
+      padding: 36px 40px;
+      flex: 1;
+    }
+
+    /* =============================================
+       STAT CARDS
+       ============================================= */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .stat-card:hover {
+      border-color: var(--border-gold);
+      box-shadow: var(--glow);
+    }
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0;
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      filter: blur(30px);
+      opacity: 0.15;
+    }
+    .stat-card.gold::before { background: var(--gold); }
+    .stat-card.green::before { background: var(--green); }
+    .stat-card.blue::before { background: var(--blue); }
+    .stat-card.amber::before { background: var(--amber); }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+    .stat-value {
+      font-family: var(--font-serif);
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+    .stat-value.gold { color: var(--gold); }
+    .stat-delta {
+      font-size: 0.7rem;
+      font-weight: 300;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .stat-delta.up { color: var(--green); }
+    .stat-delta.neutral { color: var(--text-muted); }
+    .stat-icon {
+      position: absolute;
+      top: 20px; right: 20px;
+      width: 36px; height: 36px;
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+    }
+    .stat-card:hover .stat-icon { color: var(--gold); }
+
+    /* =============================================
+       SECTION HEADER
+       ============================================= */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--text-primary);
+    }
+    .section-title span { color: var(--gold); font-style: italic; }
+    .section-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .filter-btn {
+      padding: 7px 16px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      transition: all var(--transition);
+    }
+    .filter-btn:hover, .filter-btn.active {
+      color: var(--gold);
+      border-color: var(--border-gold);
+      background: var(--gold-dim);
+    }
+    .search-field {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      color: var(--text-primary);
+      outline: none;
+      width: 200px;
+      transition: border-color var(--transition);
+    }
+    .search-field::placeholder { color: var(--text-muted); }
+    .search-field:focus { border-color: var(--border-gold); }
+
+    /* =============================================
+       PRODUCT GRID
+       ============================================= */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .product-admin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color var(--transition), box-shadow var(--transition), transform 0.25s;
+    }
+    .product-admin-card:hover {
+      border-color: var(--border-gold);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      transform: translateY(-2px);
+    }
+
+    .card-img-wrap {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .product-admin-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+    .card-tag {
+      position: absolute;
+      top: 12px; left: 12px;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+    }
+    .card-tag.new { background: #1c1c1e; color: #ffffff; border: 1px solid var(--border); }
+    .card-tag.exclusive { background: var(--gold-dark); color: white; }
+    .card-tag.bestseller { background: var(--gold-dim); color: var(--gold-dark); border: 1px solid var(--border-gold); }
+
+    .card-category-badge {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      color: var(--text-secondary);
+      font-size: 0.58rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .card-body {
+      padding: 20px;
+    }
+
+    .card-name {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+    .card-id {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    /* PRICE CONTROL */
+    .price-control {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 16px;
+      transition: border-color var(--transition);
+    }
+    .price-control:focus-within { border-color: var(--border-gold); }
+
+    .price-btn {
+      width: 40px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 300;
+      color: var(--text-muted);
+      background: transparent;
+      border: none;
+      transition: background var(--transition), color var(--transition);
+      flex-shrink: 0;
+    }
+    .price-btn:hover { background: var(--surface-3); color: var(--gold); }
+    .price-btn.decrement:hover { color: var(--red); }
+
+    .price-display {
+      flex: 1;
+      text-align: center;
+    }
+    .price-currency {
+      font-family: var(--font-sans);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+    .price-value {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--gold);
+      transition: transform 0.15s;
+    }
+    .price-value.bump {
+      animation: priceBump 0.25s ease;
+    }
+    @keyframes priceBump {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+    .price-step-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+    .price-step-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .step-btn {
+      padding: 3px 9px;
+      background: var(--surface-2);
+      color: var(--text-secondary);
+      font-size: 0.65rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      transition: all var(--transition);
+    }
+    .step-btn:hover, .step-btn.active { background: var(--gold-dim); color: var(--gold); border-color: var(--border-gold); }
+
+    /* FIELDS */
+    .fields-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .field-group { display: flex; flex-direction: column; gap: 5px; }
+    .field-group.full { grid-column: 1/-1; }
+    .field-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .field-input, .field-select, .field-textarea {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+      width: 100%;
+    }
+    .field-input:focus, .field-select:focus, .field-textarea:focus {
+      border-color: var(--border-gold);
+    }
+    .field-select option { background: var(--surface); }
+    .field-textarea {
+      resize: vertical;
+      min-height: 72px;
+      line-height: 1.6;
+      font-size: 0.75rem;
+    }
+
+    /* VARIANTS */
+    .variants-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .variant-chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 4px 10px 4px 8px;
+      font-size: 0.65rem;
+      color: var(--text-secondary);
+      transition: all var(--transition);
+    }
+    .variant-chip:hover { border-color: var(--border-gold); color: var(--gold); }
+    .variant-chip .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .variant-chip .remove-variant {
+      width: 14px; height: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.7rem;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: background var(--transition), color var(--transition);
+      margin-left: 2px;
+    }
+    .variant-chip .remove-variant:hover { background: var(--red-dim); color: var(--red); }
+    .add-variant-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+    .variant-input {
+      flex: 1;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 6px 10px;
+      font-size: 0.72rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .variant-input:focus { border-color: var(--border-gold); }
+    .add-variant-btn {
+      padding: 6px 14px;
+      background: var(--gold-dim);
+      color: var(--gold);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+    .add-variant-btn:hover { background: var(--gold); color: #ffffff; }
+
+    /* CARD FOOTER */
+    .card-footer {
+      display: flex;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-save {
+      flex: 1;
+      padding: 10px;
+      background: var(--gold);
+      color: #ffffff;
+      font-size: 0.68rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition), box-shadow 0.3s, transform 0.2s;
+    }
+    .btn-save:hover {
+      background: var(--gold-light);
+      box-shadow: 0 4px 16px rgba(154, 123, 62, 0.2);
+      transform: translateY(-1px);
+    }
+    .btn-save.saved {
+      background: var(--green-dim);
+      color: var(--green);
+      border: 1px solid rgba(74,222,128,0.2);
+    }
+    .btn-reset {
+      padding: 10px 16px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+    .btn-reset:hover { color: var(--red); border-color: rgba(248,113,113,0.3); background: var(--red-dim); }
+
+    /* =============================================
+       ANALYTICS ROW
+       ============================================= */
+    .analytics-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+    .analytics-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+    }
+    .analytics-card-title {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    /* Category bars */
+    .cat-bar-row {
+      margin-bottom: 14px;
+    }
+    .cat-bar-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .cat-bar-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: capitalize;
+    }
+    .cat-bar-count {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+    .cat-bar-track {
+      height: 4px;
+      background: var(--surface-3);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .cat-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Price distribution */
+    .price-range-row {
+      display: flex;
+      gap: 3px;
+      align-items: flex-end;
+      height: 60px;
+      margin-bottom: 8px;
+    }
+    .price-bar-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 4px;
+      height: 100%;
+    }
+    .price-bar {
+      width: 100%;
+      background: linear-gradient(to top, var(--gold-dark), var(--gold));
+      border-radius: 2px 2px 0 0;
+      transition: height 0.6s ease;
+      min-height: 4px;
+    }
+    .price-bar-label {
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      letter-spacing: 0.05em;
+    }
+
+    /* =============================================
+       TOAST
+       ============================================= */
+    .db-toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--surface-3);
+      border: 1px solid var(--border-gold);
+      color: var(--text-primary);
+      font-size: 0.78rem;
+      padding: 14px 20px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 9999;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      pointer-events: none;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    }
+    .db-toast.show { transform: translateY(0); opacity: 1; }
+    .db-toast-dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    /* =============================================
+       SCROLLBAR
+       ============================================= */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--surface-3); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+    /* =============================================
+       MODAL
+       ============================================= */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      z-index: 500;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-gold);
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 480px;
+      max-width: 95vw;
+      box-shadow: 0 20px 48px rgba(0,0,0,0.12);
+      transform: scale(0.95);
+      transition: transform 0.3s;
+    }
+    .modal-overlay.open .modal { transform: scale(1); }
+    .modal-title {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .modal-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+    .modal-field-group { margin-bottom: 16px; }
+    .modal-label {
+      display: block;
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+    .modal-input {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .modal-input:focus { border-color: var(--border-gold); }
+    .modal-select {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 0.82rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color var(--transition);
+    }
+    .modal-select option { background: var(--surface); }
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .modal-btn-add {
+      flex: 1;
+      padding: 12px;
+      background: var(--gold);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      border-radius: var(--radius-sm);
+      transition: background var(--transition);
+    }
+    .modal-btn-add:hover { background: var(--gold-light); }
+    .modal-btn-cancel {
+      padding: 12px 20px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      transition: all var(--transition);
+    }
+    .modal-btn-cancel:hover { color: var(--text-primary); border-color: var(--border-gold); }
+
+    /* FILE UPLOAD ZONE */
+    .file-upload-zone {
+      border: 1px dashed var(--border-gold);
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background var(--transition), border-color var(--transition);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .file-upload-zone:hover {
+      background: var(--gold-dim);
+      border-color: var(--gold);
+    }
+    .file-upload-zone svg {
+      color: var(--gold);
+      margin-bottom: 2px;
+    }
+    .upload-zone-text {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--text-primary);
+    }
+    .upload-zone-subtext {
+      font-size: 0.62rem;
+      color: var(--text-muted);
+    }
+
+    /* =============================================
+       RESPONSIVE
+       ============================================= */
+    @media (max-width: 1200px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar { transform: translateX(-240px); }
+      .main { margin-left: 0; }
+      .analytics-row { grid-template-columns: 1fr; }
+      .page-content { padding: 24px 20px; }
+      .topbar { padding: 0 20px; }
+    }
+    @media (max-width: 600px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .products-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-text">THUMBA</div>
+      <div class="sidebar-logo-sub">Admin Dashboard</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <div class="nav-item active" onclick="showSection('catalogue')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Catalogue
+        <span class="nav-badge" id="sidebar-product-count">8</span>
+      </div>
+      <div class="nav-item" onclick="showSection('analytics')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Analytics
+      </div>
+      <div class="nav-section-label" style="margin-top:16px">Store</div>
+      <div class="nav-item" onclick="window.open('../store/index.html','_blank')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Storefront
+      </div>
+      <div class="nav-item" onclick="window.open('../store/collections.html','_blank')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        Collections
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../store/index.html" class="sidebar-store-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Store →
+      </a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-title">Dashboard <span>/ Catalogue</span></div>
+      <div class="topbar-badge">Live Store</div>
+      <button class="topbar-btn" onclick="openAddModal()">+ Add Product</button>
+    </div>
+
+    <div class="page-content">
+
+      <!-- STATS GRID -->
+      <div class="stats-grid">
+        <div class="stat-card gold">
+          <div class="stat-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+          </div>
+          <div class="stat-label">Total Products</div>
+          <div class="stat-value gold" id="stat-total">8</div>
+          <div class="stat-delta up">↑ Active catalogue</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div class="stat-label">Total Value (₹)</div>
+          <div class="stat-value" id="stat-value">—</div>
+          <div class="stat-delta up">Catalogue potential</div>
+        </div>
+        <div class="stat-card blue">
+          <div class="stat-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="stat-label">Categories</div>
+          <div class="stat-value" id="stat-cats">3</div>
+          <div class="stat-delta neutral">Earrings · Necklaces · Rings</div>
+        </div>
+        <div class="stat-card amber">
+          <div class="stat-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div class="stat-label">Avg. Price (₹)</div>
+          <div class="stat-value" id="stat-avg">—</div>
+          <div class="stat-delta neutral">Per piece</div>
+        </div>
+      </div>
+
+      <!-- SECTION: CATALOGUE -->
+      <div id="section-catalogue">
+        <div class="section-header">
+          <div class="section-title">Product <span>Catalogue</span></div>
+          <div class="section-controls">
+            <input type="text" class="search-field" id="product-search" placeholder="Search products..." oninput="filterProducts()" />
+            <button class="filter-btn active" id="filter-all" onclick="setFilter('all', this)">All</button>
+            <button class="filter-btn" id="filter-earrings" onclick="setFilter('earrings', this)">Earrings</button>
+            <button class="filter-btn" id="filter-necklaces" onclick="setFilter('necklaces', this)">Necklaces</button>
+            <button class="filter-btn" id="filter-rings" onclick="setFilter('rings', this)">Rings</button>
+          </div>
+        </div>
+        <div class="products-grid" id="products-grid"></div>
+      </div>
+
+      <!-- SECTION: ANALYTICS -->
+      <div id="section-analytics" style="display:none">
+        <div class="section-header">
+          <div class="section-title">Store <span>Analytics</span></div>
+        </div>
+        <div class="analytics-row">
+          <div class="analytics-card">
+            <div class="analytics-card-title">Products by Category</div>
+            <div id="cat-bars"></div>
+          </div>
+          <div class="analytics-card">
+            <div class="analytics-card-title">Price Distribution</div>
+            <div class="price-range-row" id="price-bars"></div>
+            <div style="display:flex; justify-content:space-between; margin-top:8px;">
+              <span style="font-size:0.6rem;color:var(--text-muted)">Under ₹2K</span>
+              <span style="font-size:0.6rem;color:var(--text-muted)">₹2K–3K</span>
+              <span style="font-size:0.6rem;color:var(--text-muted)">₹3K–4K</span>
+              <span style="font-size:0.6rem;color:var(--text-muted)">₹4K–5K</span>
+              <span style="font-size:0.6rem;color:var(--text-muted)">Over ₹5K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product table -->
+        <div class="analytics-card">
+          <div class="analytics-card-title" style="margin-bottom:0">All Products — Summary</div>
+          <div style="overflow-x:auto;margin-top:16px;">
+            <table id="product-table" style="width:100%;border-collapse:collapse;font-size:0.78rem;">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border);">
+                  <th style="text-align:left;padding:10px 12px;color:var(--text-muted);font-weight:300;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;">Product</th>
+                  <th style="text-align:left;padding:10px 12px;color:var(--text-muted);font-weight:300;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;">Category</th>
+                  <th style="text-align:left;padding:10px 12px;color:var(--text-muted);font-weight:300;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;">Tag</th>
+                  <th style="text-align:right;padding:10px 12px;color:var(--text-muted);font-weight:300;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;">Price</th>
+                  <th style="text-align:right;padding:10px 12px;color:var(--text-muted);font-weight:300;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;">Variants</th>
+                </tr>
+              </thead>
+              <tbody id="product-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ADD PRODUCT MODAL -->
+  <div class="modal-overlay" id="add-modal-overlay">
+    <div class="modal">
+      <div class="modal-title">Add New Product</div>
+      <div class="modal-sub">This product will be saved and reflected across the store.</div>
+
+      <div class="modal-field-group">
+        <label class="modal-label">Product ID (unique slug)</label>
+        <input type="text" class="modal-input" id="modal-id" placeholder="e.g. kundan-choker" />
+      </div>
+      <div class="modal-field-group">
+        <label class="modal-label">Product Name</label>
+        <input type="text" class="modal-input" id="modal-name" placeholder="e.g. Kundan Choker Set" />
+      </div>
+      <div class="modal-field-group">
+        <label class="modal-label">Product Image</label>
+        <div class="file-upload-zone" onclick="document.getElementById('modal-image-file').click()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/>
+          </svg>
+          <span class="upload-zone-text">Click to upload product image</span>
+          <span class="upload-zone-subtext">Supports PNG, JPG, JPEG, WebP</span>
+          <input type="file" id="modal-image-file" accept="image/*" onchange="handleImageUpload(event)" style="display:none;" />
+        </div>
+        
+        <div id="modal-image-preview-wrap" style="display:none; margin-top:12px; text-align:center;">
+          <span class="modal-label">Uploaded Image Preview</span>
+          <img id="modal-image-preview" src="" style="width:100%; max-height:140px; border-radius:6px; margin-top:6px; border:1px solid var(--border-gold); object-fit:contain;" />
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div class="modal-field-group">
+          <label class="modal-label">Price (₹)</label>
+          <input type="number" class="modal-input" id="modal-price" placeholder="2500" min="0" />
+        </div>
+        <div class="modal-field-group">
+          <label class="modal-label">Category</label>
+          <select class="modal-select" id="modal-category">
+            <option value="earrings">Earrings</option>
+            <option value="necklaces">Necklaces</option>
+            <option value="rings">Rings</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div class="modal-field-group">
+          <label class="modal-label">Tag</label>
+          <select class="modal-select" id="modal-tag">
+            <option value="NEW IN">New In</option>
+            <option value="BESTSELLER">Bestseller</option>
+            <option value="EXCLUSIVE">Exclusive</option>
+          </select>
+        </div>
+        <div class="modal-field-group">
+          <label class="modal-label">Material</label>
+          <input type="text" class="modal-input" id="modal-material" placeholder="22K Gold Plated" />
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="modal-btn-add" onclick="addProduct()">Add Product</button>
+        <button class="modal-btn-cancel" onclick="closeAddModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="db-toast" id="db-toast">
+    <div class="db-toast-dot"></div>
+    <span id="db-toast-msg">Saved</span>
+  </div>
+
+  <script src="data.js"></script>
+  <script>
+    // =============================================
+    // THUMBA DASHBOARD JS
+    // =============================================
+
+    const STORAGE_KEY = 'thumba_admin_products';
+    let uploadedImageBase64 = '';
+
+    // Load products — prefer localStorage override, else use data.js
+    function loadProducts() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        try { return JSON.parse(stored); } catch(e) {}
+      }
+      // Deep copy from data.js global
+      return JSON.parse(JSON.stringify(products));
+    }
+
+    function saveProducts(prods) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prods));
+    }
+
+    let adminProducts = loadProducts();
+    let activeFilter = 'all';
+    let priceSteps = {}; // per product id
+
+    // =============================================
+    // STATS
+    // =============================================
+    function updateStats() {
+      const total = adminProducts.length;
+      const totalVal = adminProducts.reduce((s,p) => s + p.price, 0);
+      const avg = Math.round(totalVal / total);
+      const cats = [...new Set(adminProducts.map(p => p.category))].length;
+
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('sidebar-product-count').textContent = total;
+      document.getElementById('stat-value').textContent = '₹' + totalVal.toLocaleString('en-IN');
+      document.getElementById('stat-avg').textContent = '₹' + avg.toLocaleString('en-IN');
+      document.getElementById('stat-cats').textContent = cats;
+    }
+
+    // =============================================
+    // SECTION SWITCHING
+    // =============================================
+    function showSection(name) {
+      document.getElementById('section-catalogue').style.display = name === 'catalogue' ? '' : 'none';
+      document.getElementById('section-analytics').style.display = name === 'analytics' ? '' : 'none';
+
+      // update topbar title
+      const title = document.querySelector('.topbar-title');
+      title.innerHTML = 'Dashboard <span>/ ' + (name.charAt(0).toUpperCase() + name.slice(1)) + '</span>';
+
+      // update nav
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      if (name === 'analytics') renderAnalytics();
+    }
+
+    // =============================================
+    // FILTER & SEARCH
+    // =============================================
+    function setFilter(cat, btn) {
+      activeFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts();
+    }
+
+    function filterProducts() {
+      renderProducts();
+    }
+
+    function getFilteredProducts() {
+      const q = (document.getElementById('product-search')?.value || '').toLowerCase();
+      return adminProducts.filter(p => {
+        const catMatch = activeFilter === 'all' || p.category === activeFilter;
+        const searchMatch = !q || p.name.toLowerCase().includes(q) || p.id.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
+        return catMatch && searchMatch;
+      });
+    }
+
+    // =============================================
+    // RENDER PRODUCTS
+    // =============================================
+    function getVariantColor(v) {
+      const lower = v.toLowerCase();
+      if (lower.includes('rose gold')) return 'linear-gradient(135deg,#e8bcb9,#c97474)';
+      if (lower.includes('gold')) return 'linear-gradient(135deg,#e8d5a3,#c9a84c)';
+      if (lower.includes('silver')) return 'linear-gradient(135deg,#e8e8e8,#a0a0a0)';
+      if (lower.includes('antique')) return 'linear-gradient(135deg,#d4a96a,#8b6914)';
+      if (lower.includes('pearl') || lower.includes('white')) return '#f0ece4';
+      if (lower.includes('champagne')) return 'linear-gradient(135deg,#f5e6c8,#d4b896)';
+      return 'linear-gradient(135deg,#888,#444)';
+    }
+
+    function tagClass(tag) {
+      if (tag === 'NEW IN') return 'new';
+      if (tag === 'EXCLUSIVE') return 'exclusive';
+      return 'bestseller';
+    }
+
+    function getStep(id) { return priceSteps[id] || 100; }
+
+    function renderProducts() {
+      const grid = document.getElementById('products-grid');
+      const filtered = getFilteredProducts();
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 0;color:var(--text-muted);font-size:0.85rem;letter-spacing:0.1em;">No products found</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => {
+        const step = getStep(p.id);
+        const varChips = p.variants.map(v => `
+          <div class="variant-chip">
+            <div class="dot" style="background:${getVariantColor(v)}"></div>
+            ${v}
+            <span class="remove-variant" onclick="removeVariant('${p.id}','${v.replace(/'/g,"\\'")}')">×</span>
+          </div>
+        `).join('');
+
+        return `
+        <div class="product-admin-card" id="card-${p.id}">
+          <div class="card-img-wrap">
+            <img src="${p.images[0]}" alt="${p.name}" loading="lazy" onerror="this.style.opacity=0.2"/>
+            <span class="card-tag ${tagClass(p.tag)}">${p.tag}</span>
+            <span class="card-category-badge">${p.category}</span>
+          </div>
+          <div class="card-body">
+            <div class="card-name">${p.name}</div>
+            <div class="card-id">#${p.id}</div>
+
+            <!-- PRICE CONTROL -->
+            <div class="price-control" id="pc-${p.id}">
+              <button class="price-btn decrement" onclick="adjustPrice('${p.id}', -1)" title="Decrease price">−</button>
+              <div class="price-display">
+                <div class="price-currency">₹</div>
+                <div class="price-value" id="price-val-${p.id}">${p.price.toLocaleString('en-IN')}</div>
+              </div>
+              <button class="price-btn increment" onclick="adjustPrice('${p.id}', 1)" title="Increase price">+</button>
+            </div>
+
+            <!-- STEP SIZE -->
+            <div class="price-step-row">
+              <span class="price-step-label">Step:</span>
+              <button class="step-btn ${step===50?'active':''}" onclick="setStep('${p.id}',50,this)">₹50</button>
+              <button class="step-btn ${step===100?'active':''}" onclick="setStep('${p.id}',100,this)">₹100</button>
+              <button class="step-btn ${step===200?'active':''}" onclick="setStep('${p.id}',200,this)">₹200</button>
+              <button class="step-btn ${step===500?'active':''}" onclick="setStep('${p.id}',500,this)">₹500</button>
+            </div>
+
+            <!-- FIELDS -->
+            <div class="fields-grid">
+              <div class="field-group">
+                <span class="field-label">Name</span>
+                <input type="text" class="field-input" id="name-${p.id}" value="${p.name}" />
+              </div>
+              <div class="field-group">
+                <span class="field-label">Material</span>
+                <input type="text" class="field-input" id="material-${p.id}" value="${p.material}" />
+              </div>
+              <div class="field-group">
+                <span class="field-label">Category</span>
+                <select class="field-select" id="category-${p.id}">
+                  <option value="earrings" ${p.category==='earrings'?'selected':''}>Earrings</option>
+                  <option value="necklaces" ${p.category==='necklaces'?'selected':''}>Necklaces</option>
+                  <option value="rings" ${p.category==='rings'?'selected':''}>Rings</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <span class="field-label">Tag</span>
+                <select class="field-select" id="tag-${p.id}">
+                  <option value="NEW IN" ${p.tag==='NEW IN'?'selected':''}>New In</option>
+                  <option value="BESTSELLER" ${p.tag==='BESTSELLER'?'selected':''}>Bestseller</option>
+                  <option value="EXCLUSIVE" ${p.tag==='EXCLUSIVE'?'selected':''}>Exclusive</option>
+                </select>
+              </div>
+              <div class="field-group full">
+                <span class="field-label">Description</span>
+                <textarea class="field-textarea" id="desc-${p.id}">${p.description}</textarea>
+              </div>
+            </div>
+
+            <!-- VARIANTS -->
+            <div class="field-label" style="margin-bottom:8px">Variants</div>
+            <div class="variants-row" id="variants-${p.id}">${varChips}</div>
+            <div class="add-variant-row">
+              <input type="text" class="variant-input" id="variantInput-${p.id}" placeholder="Add variant (e.g. Rose Gold)" onkeydown="if(event.key==='Enter') addVariant('${p.id}')" />
+              <button class="add-variant-btn" onclick="addVariant('${p.id}')">Add</button>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="card-footer">
+              <button class="btn-save" id="save-btn-${p.id}" onclick="saveProduct('${p.id}')">Save Changes</button>
+              <button class="btn-reset" onclick="resetProduct('${p.id}')">Reset</button>
+            </div>
+          </div>
+        </div>
+        `;
+      }).join('');
+    }
+
+    // =============================================
+    // PRICE ADJUST
+    // =============================================
+    function adjustPrice(id, direction) {
+      const step = getStep(id);
+      const p = adminProducts.find(x => x.id === id);
+      if (!p) return;
+      const newPrice = Math.max(0, p.price + (step * direction));
+      p.price = newPrice;
+
+      const el = document.getElementById('price-val-' + id);
+      if (el) {
+        el.textContent = newPrice.toLocaleString('en-IN');
+        el.classList.remove('bump');
+        void el.offsetWidth; // reflow
+        el.classList.add('bump');
+      }
+
+      updateStats();
+      flashSavePending(id);
+    }
+
+    function setStep(id, val, btn) {
+      priceSteps[id] = val;
+      // Update step buttons in card
+      const card = document.getElementById('card-' + id);
+      if (card) {
+        card.querySelectorAll('.step-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      }
+    }
+
+    function flashSavePending(id) {
+      const btn = document.getElementById('save-btn-' + id);
+      if (btn && !btn.classList.contains('saved')) {
+        btn.style.background = 'rgba(198,168,107,0.2)';
+        btn.style.color = 'var(--gold)';
+        btn.style.border = '1px solid var(--border-gold)';
+      }
+    }
+
+    // =============================================
+    // SAVE / RESET
+    // =============================================
+    function saveProduct(id) {
+      const p = adminProducts.find(x => x.id === id);
+      if (!p) return;
+
+      p.name = document.getElementById('name-' + id)?.value || p.name;
+      p.material = document.getElementById('material-' + id)?.value || p.material;
+      p.category = document.getElementById('category-' + id)?.value || p.category;
+      p.tag = document.getElementById('tag-' + id)?.value || p.tag;
+      p.description = document.getElementById('desc-' + id)?.value || p.description;
+
+      saveProducts(adminProducts);
+      updateStats();
+
+      const btn = document.getElementById('save-btn-' + id);
+      if (btn) {
+        btn.style.background = '';
+        btn.style.color = '';
+        btn.style.border = '';
+        btn.textContent = '✓ Saved';
+        btn.classList.add('saved');
+        setTimeout(() => {
+          btn.textContent = 'Save Changes';
+          btn.classList.remove('saved');
+        }, 2000);
+      }
+
+      showToast('Changes saved — ' + p.name);
+    }
+
+    function resetProduct(id) {
+      // Reload from data.js original
+      const original = products.find(x => x.id === id);
+      if (!original) return;
+      const idx = adminProducts.findIndex(x => x.id === id);
+      if (idx === -1) return;
+      adminProducts[idx] = JSON.parse(JSON.stringify(original));
+      saveProducts(adminProducts);
+      updateStats();
+      renderProducts();
+      showToast('Reset to original — ' + original.name);
+    }
+
+    // =============================================
+    // VARIANTS
+    // =============================================
+    function addVariant(id) {
+      const input = document.getElementById('variantInput-' + id);
+      const val = (input?.value || '').trim();
+      if (!val) return;
+      const p = adminProducts.find(x => x.id === id);
+      if (!p) return;
+      if (!p.variants.includes(val)) {
+        p.variants.push(val);
+        // Re-render just variants row
+        const vRow = document.getElementById('variants-' + id);
+        if (vRow) {
+          vRow.innerHTML = p.variants.map(v => `
+            <div class="variant-chip">
+              <div class="dot" style="background:${getVariantColor(v)}"></div>
+              ${v}
+              <span class="remove-variant" onclick="removeVariant('${id}','${v.replace(/'/g,"\\'")}')">×</span>
+            </div>
+          `).join('');
+        }
+        if (input) input.value = '';
+        flashSavePending(id);
+      }
+    }
+
+    function removeVariant(id, variant) {
+      const p = adminProducts.find(x => x.id === id);
+      if (!p) return;
+      p.variants = p.variants.filter(v => v !== variant);
+      const vRow = document.getElementById('variants-' + id);
+      if (vRow) {
+        vRow.innerHTML = p.variants.map(v => `
+          <div class="variant-chip">
+            <div class="dot" style="background:${getVariantColor(v)}"></div>
+            ${v}
+            <span class="remove-variant" onclick="removeVariant('${id}','${v.replace(/'/g,"\\'")}')">×</span>
+          </div>
+        `).join('');
+      }
+      flashSavePending(id);
+    }
+
+    // =============================================
+    // ADD PRODUCT
+    // =============================================
+    function openAddModal() {
+      document.getElementById('add-modal-overlay').classList.add('open');
+    }
+    function closeAddModal() {
+      document.getElementById('add-modal-overlay').classList.remove('open');
+    }
+
+    function handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        uploadedImageBase64 = e.target.result;
+        const preview = document.getElementById('modal-image-preview');
+        const previewWrap = document.getElementById('modal-image-preview-wrap');
+        if (preview && previewWrap) {
+          preview.src = uploadedImageBase64;
+          previewWrap.style.display = 'block';
+        }
+        
+        const zoneText = document.querySelector('.upload-zone-text');
+        if (zoneText) {
+          zoneText.textContent = 'Uploaded: ' + file.name;
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function addProduct() {
+      const id = document.getElementById('modal-id')?.value.trim().replace(/\s+/g,'-').toLowerCase();
+      const name = document.getElementById('modal-name')?.value.trim();
+      const price = parseInt(document.getElementById('modal-price')?.value) || 0;
+      const category = document.getElementById('modal-category')?.value;
+      const tag = document.getElementById('modal-tag')?.value;
+      const material = document.getElementById('modal-material')?.value.trim();
+
+      if (!id || !name || !price) {
+        showToast('Please fill in ID, name, and price');
+        return;
+      }
+      if (!uploadedImageBase64) {
+        showToast('Please upload a product image');
+        return;
+      }
+      if (adminProducts.find(p => p.id === id)) {
+        showToast('A product with this ID already exists');
+        return;
+      }
+
+      const newProduct = {
+        id,
+        name,
+        price,
+        category,
+        tag,
+        material: material || '22K Gold Plated',
+        images: [uploadedImageBase64],
+        description: 'A handcrafted piece from the THUMBA collection.',
+        variants: ['Gold']
+      };
+
+      adminProducts.push(newProduct);
+      saveProducts(adminProducts);
+      closeAddModal();
+      updateStats();
+      renderProducts();
+      showToast('Product added — ' + name);
+
+      // Clear modal fields and states
+      ['modal-id','modal-name','modal-price','modal-material'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      const fileInput = document.getElementById('modal-image-file');
+      if (fileInput) fileInput.value = '';
+      uploadedImageBase64 = '';
+      
+      const previewWrap = document.getElementById('modal-image-preview-wrap');
+      if (previewWrap) previewWrap.style.display = 'none';
+      const previewImg = document.getElementById('modal-image-preview');
+      if (previewImg) previewImg.src = '';
+      
+      const zoneText = document.querySelector('.upload-zone-text');
+      if (zoneText) zoneText.textContent = 'Click to upload product image';
+    }
+
+    // Close modal on overlay click
+    document.getElementById('add-modal-overlay').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeAddModal();
+    });
+
+    // =============================================
+    // ANALYTICS
+    // =============================================
+    function renderAnalytics() {
+      // Category bars
+      const cats = {};
+      adminProducts.forEach(p => { cats[p.category] = (cats[p.category] || 0) + 1; });
+      const maxCat = Math.max(...Object.values(cats));
+      const catColors = { necklaces: '#C6A86B', earrings: '#A07830', rings: '#E8D5A3' };
+
+      document.getElementById('cat-bars').innerHTML = Object.entries(cats).map(([cat, count]) => `
+        <div class="cat-bar-row">
+          <div class="cat-bar-header">
+            <span class="cat-bar-label">${cat.charAt(0).toUpperCase()+cat.slice(1)}</span>
+            <span class="cat-bar-count">${count} piece${count!==1?'s':''}</span>
+          </div>
+          <div class="cat-bar-track">
+            <div class="cat-bar-fill" style="width:${Math.round(count/maxCat*100)}%;background:${catColors[cat]||'var(--gold)'}"></div>
+          </div>
+        </div>
+      `).join('');
+
+      // Price distribution
+      const ranges = [
+        { label: '<₹2K', test: p => p.price < 2000 },
+        { label: '₹2–3K', test: p => p.price >= 2000 && p.price < 3000 },
+        { label: '₹3–4K', test: p => p.price >= 3000 && p.price < 4000 },
+        { label: '₹4–5K', test: p => p.price >= 4000 && p.price < 5000 },
+        { label: '>₹5K', test: p => p.price >= 5000 }
+      ];
+      const rangeCounts = ranges.map(r => adminProducts.filter(r.test).length);
+      const maxRange = Math.max(...rangeCounts, 1);
+      document.getElementById('price-bars').innerHTML = rangeCounts.map((cnt, i) => `
+        <div class="price-bar-col">
+          <div class="price-bar" style="height:${Math.round(cnt/maxRange*50)+4}px"></div>
+          <span class="price-bar-label">${cnt}</span>
+        </div>
+      `).join('');
+
+      // Table
+      document.getElementById('product-table-body').innerHTML = adminProducts.map(p => `
+        <tr style="border-bottom:1px solid var(--border);transition:background var(--transition);" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background=''">
+          <td style="padding:12px;color:var(--text-primary)">
+            <div style="font-family:var(--font-serif);font-size:0.9rem">${p.name}</div>
+            <div style="font-size:0.62rem;color:var(--text-muted);margin-top:2px">#${p.id}</div>
+          </td>
+          <td style="padding:12px;color:var(--text-secondary);text-transform:capitalize">${p.category}</td>
+          <td style="padding:12px">
+            <span style="font-size:0.62rem;padding:3px 8px;border-radius:20px;${p.tag==='EXCLUSIVE'?'background:rgba(160,120,48,0.15);color:var(--gold-dark);border:1px solid rgba(160,120,48,0.2)':p.tag==='NEW IN'?'background:var(--surface-3);color:var(--text-secondary);border:1px solid var(--border)':'background:var(--gold-dim);color:var(--gold);border:1px solid var(--border-gold)'}">${p.tag}</span>
+          </td>
+          <td style="padding:12px;text-align:right;font-family:var(--font-serif);font-size:1rem;color:var(--gold)">₹${p.price.toLocaleString('en-IN')}</td>
+          <td style="padding:12px;text-align:right;color:var(--text-muted)">${p.variants.length}</td>
+        </tr>
+      `).join('');
+    }
+
+    // =============================================
+    // TOAST
+    // =============================================
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('db-toast');
+      document.getElementById('db-toast-msg').textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // =============================================
+    // INIT
+    // =============================================
+    document.addEventListener('DOMContentLoaded', () => {
+      updateStats();
+      renderProducts();
+    });
+  </script>
+</body>
+</html>
